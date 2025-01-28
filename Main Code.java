@@ -1,10 +1,10 @@
 /*     1/24/2025
        This is the main robot code
-       This is expecting to use sparkmax for the drive train
-       This is also expecting to use talon for control systems
+       This is expecting to use Talons for the drive train
+       This is also expecting to use SparkMax for control systems
        This has acceleration
        This has a live feed camera
-       This has arcade drive.
+       This has arcade drive using an Xbox Controller
 
 */
 package frc.robot;
