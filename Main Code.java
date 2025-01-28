@@ -5,6 +5,7 @@
        This has acceleration
        This has a live feed camera
        This has arcade drive using an Xbox Controller
+       This has an autonomous that drives forward then turns in place.
 
 */
 package frc.robot;
