@@ -96,14 +96,15 @@ public class Robot extends TimedRobot {
     
 
     // Driver Controls USB port 0
-    robotDrive.arcadeDrive(filter.calculate(driver.getLeftY()), driver.getRightX()); // This drives the robot.
+    robotDrive.arcadeDrive(driver.getLeftY(), driver.getRightX()); // This drives the robot.
     if(driver.getAButton() == true){servo.setAngle(0);} else if(driver.getBButton() == true){servo.setAngle(180);} else{servo.setAngle(90);} //This is to test a servo
 
     // Controller Controls USB port 1
     if(controller.getAButton()==true){coralIntake.set(-0.5);} else if(controller.getBButton()==true){coralIntake.set(0.5);} else{coralIntake.stopMotor();}
     if(controller.getXButton()==true){algaeIntake.set(0.5);} else if(controller.getYButton()==true){algaeIntake.set(-0.5);} else{algaeIntake.stopMotor();}
-    algaeArm.set(controller.getRightY()*0.5); // The algae arm goes up and down with the left joystick of the Controller controller.
+    algaeArm.set(controller.getRightY()*0.75); // The algae arm goes up and down with the left joystick of the Controller controller.
     climber.set(controller.getLeftY()); 
+    
   }
 
 
