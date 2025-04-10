@@ -2,6 +2,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
+
+// Differential Drive class
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 //Controller libraries
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
@@ -25,25 +29,40 @@ public class Robot extends TimedRobot {
 
   // This space is where you create all of your objects and specify where each of the objects is.
   
+
+    
+
     // Controllers
-    private XboxController driver;   // Xbox Controller plugged into DriverStation Port 0
-    private Joystick controller = new Joystick(1);            // Joystic Controller plugged into DriverStation port 1
+    private XboxController driver = new XboxController(0);  // Xbox Controller plugged into DriverStation Port 0
+    private Joystick controller = new Joystick(1);          // Joystic Controller plugged into DriverStation port 1
 
     // PWM Motor controllers
-    private final Talon motor1 = new Talon(0);                    // Plugged into PWM port 0
-    private PWMSparkMax motor2 = new PWMSparkMax(1);        // Plugged into PWM port 1
-  
+    private Talon oldTalon = new Talon(0);               // Plugged into PWM port 0
+    private PWMSparkMax sparkMax = new PWMSparkMax(1);   // Plugged into PWM port 1
+    private Talon leftDrive = new Talon(2);              // Plugged into PWM port 3
+    private Talon rightDrive = new Talon(3);             // Plugged into PWM port 3
+   
     // CAN Motor controllers
-    private TalonSRX motor3 = new TalonSRX(0);         // Can ID # 0
-    private VictorSPX motor4 = new VictorSPX(1);       // Can ID # 1
+    private TalonSRX newTalon = new TalonSRX(0);    // Can ID # 0
+    private VictorSPX victor = new VictorSPX(1);    // Can ID # 1
 
     // Timer 
     private final Timer timer = new Timer();
+    
+    // Drive Train Math 
+    private DifferentialDrive driveTrain = new DifferentialDrive(leftDrive::set, rightDrive::set);
+
 
   public Robot() {
 
-    // Camera Implementation
+    // This is how you start the live feed to the camera
     CameraServer.startAutomaticCapture();
+    
+    /*  We invert one side of the drive train so that when we
+        give both sides a positive value, they work together to
+        in one direction instead of turning
+    */
+    rightDrive.setInverted(true);
   
   }
 
@@ -69,17 +88,18 @@ public class Robot extends TimedRobot {
   // The teleopPeriodic() {} method is called periodically while in teleoperated mode or while the driver has control
   @Override
   public void teleopPeriodic() {
-    // This line of code sets motor1 to the position of the Right Y joytick axis of the xbox controller
-    motor1.set(-driver.getRightY());
-    
-    // This line of code sets a motor to go full forward when the 7 button of the flighstickis pressed, full reverse when the 8 button of the flightstick is pressed, and stopped when neither button is pressed.
-    if(controller.getRawButton(7)){motor2.set(1);} else if (controller.getRawButton(8)){motor2.set(-1);} else {motor2.stopMotor();}
 
-    // This line of code sets a motor to the Y axis of the flight Stick
-    motor3.set(ControlMode.PercentOutput, -controller.getY());
+    // This line is representative of how you could control the drive train of a skid steer robot.
+    driveTrain.arcadeDrive(driver.getLeftY(), -driver.getRightY());
 
-    // This line of code sets a motor to full throttle when the B button is pressed, full reverse when the A button is pressed, and stopped when neither button is pressed.
-    if(driver.getBButton()){motor4.set(ControlMode.PercentOutput, 1);} else if (driver.getAButton()){motor4.set(ControlMode.PercentOutput, -1);} else{motor4.set(ControlMode.PercentOutput, 0);}
+    // These two lines set the speed of a motor based on the position of a certain joystick
+    oldTalon.set(-controller.getX());
+    newTalon.set(ControlMode.PercentOutput, -controller.getY());
+
+    // These two lines give a motor an output based on if a certain button is pressed or not
+    if(driver.getBButton()){victor.set(ControlMode.PercentOutput, 1);} else if (driver.getAButton()){victor.set(ControlMode.PercentOutput, -1);} else{victor.set(ControlMode.PercentOutput, 0);}
+    if(controller.getRawButton(7)){sparkMax.set(1);} else if (controller.getRawButton(8)){sparkMax.set(-1);} else {sparkMax.stopMotor();}
+
   }
 
   // The disabledInit() {} method is called once at the beggining of disabled mode
