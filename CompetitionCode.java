@@ -146,16 +146,23 @@ private AnalogInput m_US = new AnalogInput(0);
     // Driver Controls USB port 0    .set(ControlMode.PercentOutput, driver.getLeftBumperButton())b
 
     robotDrive.arcadeDrive(driver.getLeftY(), driver.getRightX()); // This drives the robot.
-    if(driver.getAButton()){coralIntake.set(-0.4);} else if(driver.getBButton()){coralIntake.set(0.4);} else{coralIntake.stopMotor();}
-    if (driver.getXButton()){algaeDislodger.set(1);} else if(driver.getYButton()){algaeDislodger.set(-1);} else{algaeDislodger.stopMotor();}
+    if(driver.getAButton()){coralIntake.set(-0.4);}
+    else if(driver.getBButton()){coralIntake.set(0.4);}
+    else{coralIntake.stopMotor();}
+    if (driver.getXButton()){algaeDislodger.set(1);}
+    else if(driver.getYButton()){algaeDislodger.set(-1);}
+    else{algaeDislodger.stopMotor();}
     
     
     // Controller Controls USB port 1
 
-    if(controller.getXButton()==true){algaeIntake.set(0.5);} else if(controller.getYButton()==true){algaeIntake.set(-0.5);} else{algaeIntake.stopMotor();}
+    if(controller.getXButton()==true){algaeIntake.set(0.5);}
+    else if(controller.getYButton()==true){algaeIntake.set(-0.5);}
+    else{algaeIntake.stopMotor();}
     algaeArm.set(-controller.getLeftY()*0.75); // The algae arm goes up and down with the left joystick of the Controller controller.
 
-    if (controller.getLeftBumperButtonPressed()){climber.set(DoubleSolenoid.Value.kForward);} else if (controller.getRightBumperButtonPressed()){climber.set(DoubleSolenoid.Value.kReverse);}
+    if (controller.getLeftBumperButtonPressed()){climber.set(DoubleSolenoid.Value.kForward);}
+    else if (controller.getRightBumperButtonPressed()){climber.set(DoubleSolenoid.Value.kReverse);}
     //algaeDislodger.set(-controller.getRightY());
   }
 
